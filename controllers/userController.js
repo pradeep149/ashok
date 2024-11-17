@@ -43,15 +43,16 @@ export const loginUser = async (req, res) => {
 
 // Upload Assignment
 export const uploadAssignment = async (req, res) => {
-  const { task, adminId } = req.body;
+  const { task, admin } = req.body;
+
   try {
-    const admin = await Admin.findById(adminId);
-    if (!admin) return res.status(404).json({ message: "Admin not found" });
+    const adminn = await Admin.findOne({ name: admin });
+    if (!adminn) return res.status(404).json({ message: "Admin not found" });
 
     const assignment = new Assignment({
       userId: req.user.id,
       task,
-      admin: admin._id,
+      admin: adminn._id,
     });
     await assignment.save();
 
